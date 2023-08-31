@@ -1,22 +1,6 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Flask Form Example</title>
-</head>
-<body>
-    <h1>Enter User Information</h1>
-    <form method="POST" action="/submit">
-        <label for="name">Name:</label>
-        <input type="text" id="name" name="name" required><br><br>
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required><br><br>
-        <input type="submit" value="Submit">
-    </form>
-    <h2>Users:</h2>
-    <ul>
-        {% for user in users %}
-            <li>{{ user.name }} - {{ user.email }}</li>
-        {% endfor %}
-    </ul>
-</body>
-</html>
+{% extends 'base.html'%}
+{% include 'header.html'%}
+{% block title %} Home {% endblock %}
+{% block body %}
+<h1>Template inheritance</h1>
+{% endblock %}
