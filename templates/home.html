@@ -2,5 +2,13 @@
 {% include 'header.html'%}
 {% block title %} Home {% endblock %}
 {% block body %}
-<h1>Template inheritance</h1>
+<div>
+    <form action="{{url_for('insert')}}" method="POST">
+        <label for="">Name :</label>
+        <input name="name" placeholder="Plese enter you name" type="text">
+        <label for="email">Email :</label>
+        <input name="email" placeholder="Please enter your email" type="email">
+        <input type="submit">
+    </form>
+</div>
 {% endblock %}

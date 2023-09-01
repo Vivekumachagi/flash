@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
@@ -19,7 +19,17 @@ class Students(db.Model):
     grade = db.Column 
     section = db.Column  
 
-@app.route('/insert')
+@app.route('/insert', methods = ['POST'])
+def insert():
+    if request.method == 'POST':
+        username = request.form['name']
+        email = request.form['email']
+        my_data = Data(username = username , email = email)
+        db.session.add(my_data)
+        db.session.commit()
+        return redirect(url_for('hello_world'))
+    
+@app.route('/login')
 def insertData():
     my_data = Data(username="viveksdf", email="vivsadaek@gmail.com")
     db.session.add(my_data)
