@@ -1,5 +1,6 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 
 app = Flask(__name__)
 app.secret_key = "Secret Key"
@@ -19,16 +20,27 @@ class Students(db.Model):
     grade = db.Column 
     section = db.Column  
 
-@app.route('/insert', methods = ['POST'])
+@app.route('/signup')
+def render_signup():
+    return render_template('signup.html')
+
+@app.route('/register', methods = ['POST'])
 def insert():
     if request.method == 'POST':
         username = request.form['name']
         email = request.form['email']
-        my_data = Data(username = username , email = email)
-        db.session.add(my_data)
-        db.session.commit()
-        return redirect(url_for('hello_world'))
-    
+        user = Data.query.filter_by(username=username).first()
+        if user and user.email == email:
+            login_user(user)
+            flash('Login successful!', 'success')
+            return redirect(url_for('hello_world'))
+        else:
+            my_data = Data(username=username, email=email)
+            db.session.add(my_data)
+            db.session.commit()
+            flash('Data inserted successful!', 'success')
+
+    return redirect(url_for('hello_world'))
 @app.route('/login')
 def insertData():
     my_data = Data(username="viveksdf", email="vivsadaek@gmail.com")

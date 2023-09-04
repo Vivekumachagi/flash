@@ -3,8 +3,10 @@
 {% block body %}
 <div class="">
     <div>
-        <h1>header is working</h1>
+        <button id="header-signup">SIGNUP</button>
     </div>
 </div>
 {% endblock %}
-    
+{% block js %}
+<script src="{{ url_for('static', filename='js/header.js') }}"></script>
+{% endblock %}
