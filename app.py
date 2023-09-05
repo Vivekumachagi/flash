@@ -67,6 +67,9 @@ def insert():
         grade = request.form['grade']
         password = request.form['password']
         confirmpassword = request.form['confirmpassword']
+        if not username or not formemail or not grade or not password or not confirmpassword:
+            flash('Please fill in all the form fields.', 'error')
+            return redirect(url_for('home_page'))
         user = getUser(formemail)
         if user:
             flash('account already exist please login!', 'error')
@@ -104,6 +107,7 @@ def postLogin():
             return login_page()
     else:
         return render_template('home.html')
+
 
 @app.route('/logout')
 @login_required
