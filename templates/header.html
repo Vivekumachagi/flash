@@ -1,11 +1,14 @@
 {% extends 'base.html'%}
 {% block title %} Flask Crud {% endblock %}
 {% block body %}
-<div class="">
-    <div>
+{% if current_user.is_authenticated %}
+        <p>Hello, {{ current_user.name }}!</p>
+        <a href="{{ url_for('logout') }}">Logout</a>
+    {% else %}
+        <p>You are not logged in.</p>
+        <a href="{{ url_for('login_page') }}">Login</a>
         <button id="header-signup">SIGNUP</button>
-    </div>
-</div>
+    {% endif %}
 {% endblock %}
 {% block js %}
 <script src="{{ url_for('static', filename='js/header.js') }}"></script>

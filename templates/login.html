@@ -4,21 +4,21 @@
 {% block body %}
 <div>
     {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                <div class="alert alert-{{ messages[0].split(' ')[0] }}">
-                    <ul>
-                        {% for message in messages %}
-                            <li>{{ message }}</li>
-                        {% endfor %}
-                    </ul>
-                </div>
-            {% endif %}
-        {% endwith %}
-    <form action="{{url_for('insert')}}" method="POST">
-        <label for="">Name :</label>
-        <input name="name" placeholder="Plese enter you name" type="text">
-        <label for="email">Email :</label>
-        <input name="email" placeholder="Please enter your email" type="email">
+    {% if messages %}
+    <div class="alert alert-{{ messages[0].split(' ')[0] }}">
+        <ul>
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+    {% endwith %}
+    <form action="{{url_for('postLogin')}}" method="POST">
+        <label for="">Email :</label>
+        <input name="email" placeholder="Plese enter your email" type="email">
+        <label for="password">Password :</label>
+        <input name="password" placeholder="Please enter your password" type="password">
         <input type="submit">
     </form>
 </div>
