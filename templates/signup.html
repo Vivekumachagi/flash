@@ -1,0 +1,31 @@
+{% extends 'base.html'%}
+{% include 'header.html'%}
+{% block title %} Sign Up {% endblock %}
+{% block body %}
+<div>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <div class="alert alert-{{ messages[0].split(' ')[0] }}">
+        <ul>
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+    {% endwith %}
+    <form action="{{url_for('auth.signup')}}" method="POST">
+        <label for="name">Name :</label>
+        <input name="name" placeholder="Plese enter you name" type="text">
+        <label for="email">Email :</label>
+        <input name="email" placeholder="Please enter your email" type="email">
+        <label for="grade">GRADE :</label>
+        <input name="grade" placeholder="Plese enter your grade" type="int">
+        <label for="password">PASSWORD :</label>
+        <input name="password" placeholder="Plese enter password" type="password">
+        <label for="confirmpassword">CONFIRM PASSWORD :</label>
+        <input name="confirmpassword" placeholder="Plese re-enter password" type="password">
+        <input type="submit">
+    </form>
+</div>
+{% endblock %}

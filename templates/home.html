@@ -2,5 +2,40 @@
 {% include 'header.html'%}
 {% block title %} Home {% endblock %}
 {% block body %}
-<h1>Template inheritance</h1>
+<div>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <div class="alert alert-{{ messages[0].split(' ')[0] }}">
+        <ul>
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+    {% endwith %}
+    {% if data %}
+    <h1>Stable Data Grid View</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Price</th>
+                <th>email</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in data %}
+            <tr>
+                <td>{{ item.id }}</td>
+                <td>{{ item.name }}</td>
+                <td>{{ item.email }}</td>
+                <td>{{ item.grade }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+</div>
 {% endblock %}

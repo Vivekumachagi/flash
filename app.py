@@ -1,26 +1,46 @@
 from flask import Flask, render_template
-from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager
+from datetime import timedelta
+from models import db, Students
+from controllers.auth_controller import auth_blueprint
+from datetime import timedelta
+from controllers.utils import getAllDetails
+from flask_login import login_user, login_required, logout_user, current_user
 
 app = Flask(__name__)
 app.secret_key = "Secret Key"
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:codilar@localhost/flask'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = SQLAlchemy(app)
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=30)
+db.init_app(app)
 
-class Data(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), unique=True, nullable=False)
-    email = db.Column(db.String(120), unique=True, nullable=False)
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'auth.login'
 
-@app.route('/insert')
-def insertData():
-    my_data = Data(username="viveksdf", email="vivsadaek@gmail.com")
-    db.session.add(my_data)
-    db.session.commit()
+app.register_blueprint(auth_blueprint)
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    return Students.query.get(int(user_id))
+
 
 @app.route('/')
-def hello_world():
-    return render_template('home.html')
+def home_page():
+    if current_user.is_authenticated:
+        return render_template('home.html', data=getAllDetails)
+    else:
+        return render_template('home.html')
+
+
+@app.route('/login')
+def logIn():
+    select_user_type = ["Students", "Teachers"]
+    return render_template('login.html', select_choices=select_user_type)
+
 
 if __name__ == '__main__':
+    with app.app_context():
+        db.create_all()
     app.run(debug=True)
