@@ -14,7 +14,7 @@
     </div>
     {% endif %}
     {% endwith %}
-    <form action="{{url_for('insert')}}" method="POST">
+    <form action="{{url_for('auth.signup')}}" method="POST">
         <label for="name">Name :</label>
         <input name="name" placeholder="Plese enter you name" type="text">
         <label for="email">Email :</label>

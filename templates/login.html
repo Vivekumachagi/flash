@@ -1,6 +1,7 @@
 {% extends 'base.html'%}
 {% include 'header.html'%}
 {% block title %} Home {% endblock %}
+{% set is_login_page = True %}
 {% block body %}
 <div>
     {% with messages = get_flashed_messages() %}
@@ -14,7 +15,12 @@
     </div>
     {% endif %}
     {% endwith %}
-    <form action="{{url_for('postLogin')}}" method="POST">
+    <form action="{{url_for('auth.postLogin')}}" method="POST">
+        <!-- TODO get options from app -->
+        <select id="select_data" name="selected_option">
+            <option value="Student">Student</option>
+            <option value="Teacher">Teacher</option>
+        </select>
         <label for="">Email :</label>
         <input name="email" placeholder="Plese enter your email" type="email">
         <label for="password">Password :</label>
