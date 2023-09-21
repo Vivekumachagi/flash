@@ -7,8 +7,12 @@ class Students(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80),nullable=False)
     email = db.Column(db.String(30), unique=True, nullable=False)
-    grade = db.Column(db.Integer)
+    phone_no = db.Column(db.Integer)
     password = db.Column(db.String(60))
+    user_role = db.Column(db.String(60))
+    parent_phone =  db.Column(db.Integer)
+    registratation_no = db.Column(db.Text)
+    faculty_id = db.Column(db.Integer)
 
 class Teachers(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)

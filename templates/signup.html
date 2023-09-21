@@ -1,8 +1,9 @@
-{% extends 'base.html'%}
-{% include 'header.html'%}
+{% extends 'base.html' %}
+{% include 'header.html' %}
 {% block title %} Sign Up {% endblock %}
 {% block body %}
-<div>
+<div class="registration-form">
+    <h2>Sign Up</h2>
     {% with messages = get_flashed_messages() %}
     {% if messages %}
     <div class="alert alert-{{ messages[0].split(' ')[0] }}">
@@ -15,17 +16,187 @@
     {% endif %}
     {% endwith %}
     <form action="{{url_for('auth.signup')}}" method="POST">
-        <label for="name">Name :</label>
-        <input name="name" placeholder="Plese enter you name" type="text">
-        <label for="email">Email :</label>
-        <input name="email" placeholder="Please enter your email" type="email">
-        <label for="grade">GRADE :</label>
-        <input name="grade" placeholder="Plese enter your grade" type="int">
-        <label for="password">PASSWORD :</label>
-        <input name="password" placeholder="Plese enter password" type="password">
-        <label for="confirmpassword">CONFIRM PASSWORD :</label>
-        <input name="confirmpassword" placeholder="Plese re-enter password" type="password">
-        <input type="submit">
+        <div class="input-container">
+            <label for="user_name">User Name:</label>
+            <input name="user_name" type="text" required>
+        </div>
+
+        <div class="input-container">
+            <label for="email">Email:</label>
+            <input name="email" type="email" required>
+        </div>
+
+        <div class="input-container">
+            <label for="phone_no">Phone Number:</label>
+            <input name="phone_no" type="tel" required>
+        </div>
+
+        <div class="input-container">
+            <label for="password">Password:</label>
+            <input name="password" type="password" required>
+        </div>
+
+        <div class="input-container">
+            <label for="confirm_password">Confirm Password:</label>
+            <input name="confirm_password" type="password" required>
+        </div>
+
+        <div class="input-container">
+            <label for="user_role">User Role:</label>
+            <select name="user_role" id="user_role" required>
+                <option value="parent">Parent</option>
+                <option value="student">Student</option>
+                <option value="faculty">Faculty</option>
+            </select>
+        </div>
+
+        <!-- Additional fields based on user role -->
+        <div id="student_fields" class="role-fields">
+            <label for="parent_phone">Parent Phone Number:</label>
+            <input name="parent_phone" type="tel">
+        </div>
+
+        <div id="parent_fields" class="role-fields" style="display: none;">
+            <label for="registration_numbers">Student Registration Numbers:</label>
+            <div id="registration_number_container">
+                <div class="registration-number-input">
+                    <input name="registration_numbers[]" type="text">
+                    <button type="button" class="delete-button" onclick="deleteRegistrationNumber(this)">Delete</button>
+                </div>
+            </div>
+            <button type="button" onclick="addRegistrationNumber()">Add Registration Number</button>
+        </div>
+
+        <div id="faculty_fields" class="role-fields" style="display: none;">
+            <label for="faculty_id">Faculty ID:</label>
+            <input name="faculty_id" type="text">
+        </div>
+
+        <button type="submit">Sign Up</button>
     </form>
 </div>
+<style>
+    .registration-form {
+        max-width: 400px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f4f4f4;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+        text-align: center;
+    }
+
+    .input-container {
+        margin-bottom: 15px;
+    }
+
+    label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    input,
+    select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+    }
+
+    .role-fields {
+        display: none;
+    }
+
+    button {
+        width: 100%;
+        padding: 10px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 18px;
+        transition: background-color 0.2s;
+    }
+
+    button:hover {
+        background-color: #0056b3;
+    }
+    /* ... (Previous CSS styles) ... */
+    
+    .registration-number-input {
+        display: flex;
+        align-items: center;
+    }
+
+    .delete-button {
+        background-color: #f44336;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        margin-left: 10px;
+        cursor: pointer;
+    }
+
+    .delete-button:hover {
+        background-color: #d32f2f;
+    }
+</style>
+
+<script>
+    function addRegistrationNumber() {
+        var container = document.getElementById("registration_number_container");
+        var inputContainer = document.createElement("div");
+        inputContainer.className = "registration-number-input";
+        var input = document.createElement("input");
+        input.name = "registration_numbers[]";
+        input.type = "text";
+        input.required = true;
+        var deleteButton = document.createElement("button");
+        deleteButton.type = "button";
+        deleteButton.className = "delete-button";
+        deleteButton.textContent = "Delete";
+        deleteButton.onclick = function() {
+            deleteRegistrationNumber(deleteButton);
+        };
+        inputContainer.appendChild(input);
+        inputContainer.appendChild(deleteButton);
+        container.appendChild(inputContainer);
+    }
+
+    function deleteRegistrationNumber(button) {
+        var inputContainer = button.parentElement;
+        inputContainer.remove();
+    }
+
+    document.getElementById("user_role").addEventListener("change", function () {
+        var selectedRole = this.value;
+        var studentFields = document.getElementById("student_fields");
+        var parentFields = document.getElementById("parent_fields");
+        var facultyFields = document.getElementById("faculty_fields");
+
+        if (selectedRole === "student") {
+            studentFields.style.display = "block";
+            parentFields.style.display = "none";
+            facultyFields.style.display = "none";
+        } else if (selectedRole === "faculty") {
+            studentFields.style.display = "none";
+            parentFields.style.display = "none";
+            facultyFields.style.display = "block";
+        } else if (selectedRole === "parent") {
+            studentFields.style.display = "none";
+            parentFields.style.display = "block";
+            facultyFields.style.display = "none";
+        } else {
+            studentFields.style.display = "none";
+            parentFields.style.display = "none";
+            facultyFields.style.display = "none";
+        }
+    });
+</script>
 {% endblock %}
