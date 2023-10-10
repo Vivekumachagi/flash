@@ -1,8 +1,17 @@
-{% extends 'base.html'%}
-{% include 'header.html'%}
+{% extends 'base.html' %}
+{% include 'header.html' %}
 {% block title %} Sign Up {% endblock %}
 {% block body %}
-<div>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="/static/css/signup/styles.css">
+</head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<div class="registration-form">
+    <h2>Sign Up</h2>
     {% with messages = get_flashed_messages() %}
     {% if messages %}
     <div class="alert alert-{{ messages[0].split(' ')[0] }}">
@@ -14,18 +23,65 @@
     </div>
     {% endif %}
     {% endwith %}
-    <form action="{{url_for('auth.signup')}}" method="POST">
-        <label for="name">Name :</label>
-        <input name="name" placeholder="Plese enter you name" type="text">
-        <label for="email">Email :</label>
-        <input name="email" placeholder="Please enter your email" type="email">
-        <label for="grade">GRADE :</label>
-        <input name="grade" placeholder="Plese enter your grade" type="int">
-        <label for="password">PASSWORD :</label>
-        <input name="password" placeholder="Plese enter password" type="password">
-        <label for="confirmpassword">CONFIRM PASSWORD :</label>
-        <input name="confirmpassword" placeholder="Plese re-enter password" type="password">
-        <input type="submit">
+    <form action="{{ url_for('auth.signup') }}" method="POST">
+        <div class="input-container">
+            <label for="user_name">User Name:</label>
+            <input name="user_name" type="text" required>
+        </div>
+
+        <div class="input-container">
+            <label for="email">Email:</label>
+            <input name="email" type="email" required>
+        </div>
+
+        <div class="input-container">
+            <label for="phone_no">Phone Number:</label>
+            <input name="phone_no" type="tel" required>
+        </div>
+
+        <div class="input-container">
+            <label for="password">Password:</label>
+            <input name="password" type="password" required>
+        </div>
+
+        <div class="input-container">
+            <label for="confirm_password">Confirm Password:</label>
+            <input name="confirm_password" type="password" required>
+        </div>
+
+        <div class="input-container">
+            <label for="user_role">User Role:</label>
+            <select name="user_role" id="user_role" required>
+                <option value="parent">Parent</option>
+                <option value="student">Student</option>
+                <option value="faculty">Faculty</option>
+            </select>
+        </div>
+
+        <!-- Additional fields based on user role -->
+        <div id="student_fields" class="role-fields" style="display: none;">
+            <label for="parent_phone">Parent Phone Number:</label>
+            <input name="parent_phone" type="tel" required>
+        </div>
+
+        <div id="parent_fields" class="role-fields" style="display: none;">
+            <label for="registration_numbers">Student Registration Numbers:</label>
+            <div id="registration_number_container">
+                <div class="registration-number-input">
+                    <input name="registration_numbers[]" type="text" required>
+                    <button type="button" class="delete-button" onclick="deleteRegistrationNumber(this)"><i class="fas fa-trash-alt"></i></button>
+                </div>
+            </div>
+            <button type="button" class="add-button" onclick="addRegistrationNumber(this)"><i class="fas fa-plus"></i></button>
+            </div>
+
+        <div id="faculty_fields" class="role-fields" style="display: none;">
+            <label for="faculty_id">Faculty ID:</label>
+            <input name="faculty_id" type="text" required>
+        </div>
+
+        <button type="submit" class="submit">Sign Up</button>
     </form>
 </div>
+<script src="{{ url_for('static', filename='js/signup/signup.js') }}"></script>
 {% endblock %}
